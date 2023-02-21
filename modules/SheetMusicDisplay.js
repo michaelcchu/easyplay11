@@ -1,10 +1,6 @@
 export default (() => {
-    let tk;
-
-    //verovio.module.onRuntimeInitialized = main;
-
     function main() {
-        tk = new verovio.toolkit();
+        const tk = new verovio.toolkit();
         console.log("Verovio has loaded!");
 
         tk.setOptions({
@@ -190,10 +186,8 @@ export default (() => {
             osmd.zoom = zoomFactor.value;
             render();
         }
+
+        return {getCurrentNote: getCurrentNote, goToNextNote: goToNextNote}
     }
-    return {
-        //getCurrentNote: getCurrentNote, 
-        //goToNextNote: goToNextNote,
-        main: main
-    };
+    return {main: main};
 })();
