@@ -2,7 +2,7 @@ import SoundGenerator from './modules/SoundGenerator.js';
 import SheetMusicDisplay from './modules/SheetMusicDisplay.js';
 
 document.addEventListener("DOMContentLoaded", () => {
-    verovio.module.onRuntimeInitialized = SheetMusicDisplay.main;
+    verovio.module.onRuntimeInitialized = () => {SheetMusicDisplay.main();};
 });
 
 let activePress = null; let press;

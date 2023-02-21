@@ -41,18 +41,6 @@ export default (() => {
     
         let loadPromise; let parts; let track;
         //parse("./data/Aus_meines_Herzens_Grunde.mxl");
-        
-        function getCurrentNote() {
-            const osmdNote = osmd.cursor.NotesUnderCursor()[0];
-            if (osmdNote) {
-                const pitch = osmdNote.pitch;
-                const note = {
-                    pitch: pitch.fundamentalNote + pitch.AccidentalHalfTones, 
-                    octave: pitch.octave + 3,
-                }
-                return note;
-            }
-        }
     
         function goToMeasure() {
             function getCurrentMeasure() {
@@ -83,45 +71,7 @@ export default (() => {
                 document.activeElement.blur();
             }
         }
-    
-        function goToNextNote() {
-            // Skip tied notes
-            while ((osmd.cursor.NotesUnderCursor().length > 0) 
-            && osmd.cursor.NotesUnderCursor()[0] 
-            && osmd.cursor.NotesUnderCursor()[0].tie
-            && osmd.cursor.NotesUnderCursor()[0].tie.Notes.at(-1)
-            !== osmd.cursor.NotesUnderCursor()[0]) {
-                osmd.cursor.next();
-            }
-    
-            osmd.cursor.next();
-    
-            // Skip rests
-            while ((osmd.cursor.NotesUnderCursor().length > 0) 
-                && osmd.cursor.NotesUnderCursor()[0].isRest()) {
-                osmd.cursor.next();
-            }   
-        }
-    
-        function goToPreviousNote() {
-            osmd.cursor.previous();
-    
-            // Skip tied notes
-            while ((osmd.cursor.NotesUnderCursor().length > 0) 
-            && osmd.cursor.NotesUnderCursor()[0] 
-            && osmd.cursor.NotesUnderCursor()[0].tie
-            && osmd.cursor.NotesUnderCursor()[0].tie.StartNote 
-            !== osmd.cursor.NotesUnderCursor()[0]) {
-                osmd.cursor.previous();
-            }
-    
-            // Skip rests
-            while ((osmd.cursor.NotesUnderCursor().length > 0) 
-                && osmd.cursor.NotesUnderCursor()[0].isRest()) {
-                osmd.cursor.previous();
-            }
-        }
-    
+        
         function moveCursor(e) {
             if (document.activeElement.nodeName !== 'INPUT') {
                 if (e.key === "ArrowLeft") {goToPreviousNote();}
@@ -186,8 +136,60 @@ export default (() => {
             osmd.zoom = zoomFactor.value;
             render();
         }
-
-        return {getCurrentNote: getCurrentNote, goToNextNote: goToNextNote}
     }
-    return {main: main};
+
+    function getCurrentNote() {
+        const osmdNote = osmd.cursor.NotesUnderCursor()[0];
+        if (osmdNote) {
+            const pitch = osmdNote.pitch;
+            const note = {
+                pitch: pitch.fundamentalNote + pitch.AccidentalHalfTones, 
+                octave: pitch.octave + 3,
+            }
+            return note;
+        }
+    }
+
+    function goToNextNote() {
+        // Skip tied notes
+        while ((osmd.cursor.NotesUnderCursor().length > 0) 
+        && osmd.cursor.NotesUnderCursor()[0] 
+        && osmd.cursor.NotesUnderCursor()[0].tie
+        && osmd.cursor.NotesUnderCursor()[0].tie.Notes.at(-1)
+        !== osmd.cursor.NotesUnderCursor()[0]) {
+            osmd.cursor.next();
+        }
+
+        osmd.cursor.next();
+
+        // Skip rests
+        while ((osmd.cursor.NotesUnderCursor().length > 0) 
+            && osmd.cursor.NotesUnderCursor()[0].isRest()) {
+            osmd.cursor.next();
+        }   
+    }
+
+    function goToPreviousNote() {
+        osmd.cursor.previous();
+
+        // Skip tied notes
+        while ((osmd.cursor.NotesUnderCursor().length > 0) 
+        && osmd.cursor.NotesUnderCursor()[0] 
+        && osmd.cursor.NotesUnderCursor()[0].tie
+        && osmd.cursor.NotesUnderCursor()[0].tie.StartNote 
+        !== osmd.cursor.NotesUnderCursor()[0]) {
+            osmd.cursor.previous();
+        }
+
+        // Skip rests
+        while ((osmd.cursor.NotesUnderCursor().length > 0) 
+            && osmd.cursor.NotesUnderCursor()[0].isRest()) {
+            osmd.cursor.previous();
+        }
+    }
+
+    return {main: main,
+        getCurrentNote: getCurrentNote, 
+        goToNextNote: goToNextNote
+    };
 })();
