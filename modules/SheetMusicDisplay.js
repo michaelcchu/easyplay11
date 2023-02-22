@@ -1,6 +1,3 @@
-
-
-
 export default (() => {
     function main() {
         const tk = new verovio.toolkit();
@@ -20,7 +17,7 @@ export default (() => {
             i = -1;
         }
     
-        fetch("../data/Beethoven__Symphony_No._9__Op._125-Clarinetto_1_in_C_(Clarinet).mxl")
+        fetch("./data/Beethoven__Symphony_No._9__Op._125-Clarinetto_1_in_C_(Clarinet).mxl")
         .then( response => response.arrayBuffer() )
         .then( data => {readData(data);} )
         .catch( e => {console.log( e );} );
