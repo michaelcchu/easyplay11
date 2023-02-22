@@ -2,6 +2,17 @@ export default (() => {
 
     let notes; let i;
 
+    function getCurrentNote() {
+        let playingNotes = document.querySelectorAll('g.note.playing');
+        for (let playingNote of playingNotes) {
+            const note = {
+                pitch: playingNote.dataset.pname,
+                octave: +playingNote.dataset.oct
+            }
+            return note;
+        }
+    }
+
     function goToNextNote() {
         // Remove the attribute 'playing' of all notes previously playing
         let playingNotes = document.querySelectorAll('g.note.playing');
@@ -14,14 +25,15 @@ export default (() => {
         }
     }
 
-    function getCurrentNote() {
+    function goToPreviousNote() {
+        // Remove the attribute 'playing' of all notes previously playing
         let playingNotes = document.querySelectorAll('g.note.playing');
         for (let playingNote of playingNotes) {
-            const note = {
-                pitch: playingNote.dataset.pname,
-                octave: +playingNote.dataset.oct
-            }
-            return note;
+            playingNote.classList.remove("playing");
+        }
+        i--;
+        if (i >= 0) {
+            notes[i].classList.add("playing");
         }
     }
 
@@ -96,8 +108,6 @@ export default (() => {
             }
         }
 
-
-        
         function moveCursor(e) {
             if (document.activeElement.nodeName !== 'INPUT') {
                 if (e.key === "ArrowLeft") {goToPreviousNote();}
@@ -163,29 +173,7 @@ export default (() => {
             render();
         }
     }
-    
-
-
-    
-    function goToPreviousNote() {
-        osmd.cursor.previous();
-    
-        // Skip tied notes
-        while ((osmd.cursor.NotesUnderCursor().length > 0) 
-        && osmd.cursor.NotesUnderCursor()[0] 
-        && osmd.cursor.NotesUnderCursor()[0].tie
-        && osmd.cursor.NotesUnderCursor()[0].tie.StartNote 
-        !== osmd.cursor.NotesUnderCursor()[0]) {
-            osmd.cursor.previous();
-        }
-    
-        // Skip rests
-        while ((osmd.cursor.NotesUnderCursor().length > 0) 
-            && osmd.cursor.NotesUnderCursor()[0].isRest()) {
-            osmd.cursor.previous();
-        }
-    }
-    
+        
     document.addEventListener("DOMContentLoaded", () => {
         verovio.module.onRuntimeInitialized = main;
     });
