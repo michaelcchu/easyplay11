@@ -5,6 +5,10 @@ body {font-family: Roboto;}
     overflow: scroll;
 }
 
+g.note.playing {
+    fill: crimson;
+}
+
 .side-panel {grid-area: top;}
 
 .side-panel-close .side-panel {display: none;}
