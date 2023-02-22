@@ -67,9 +67,6 @@ export default (() => {
         const select = document.getElementById("select");
         select.addEventListener("change", setTrack);
     
-        const view = document.getElementById("view");
-        view.addEventListener("change", setView);
-    
         const zoomFactor = document.getElementById("zoomFactor");
         zoomFactor.addEventListener("change", setZoom);
     
@@ -157,15 +154,6 @@ export default (() => {
                 osmd.sheet.Instruments[i].Visible = (i === track);
             }
             render(reset);
-        }
-    
-        function setView() {
-            if (view.value === "horizontal") {
-                osmd.setOptions({renderSingleHorizontalStaffline: true});
-            } else {
-                osmd.setOptions({renderSingleHorizontalStaffline: false});
-            }
-            render();
         }
         
         function setZoom() {
