@@ -1,27 +1,30 @@
+
+
+
 export default (() => {
     function main() {
         const tk = new verovio.toolkit();
         console.log("Verovio has loaded!");
-
+    
         tk.setOptions({
             svgAdditionalAttribute: ["note@pname", "note@oct"],
             breaks: "none"
         });
-
+    
         let notes; let i;
-
+    
         function readData(data) {
             tk.loadZipDataBuffer(data);
             document.getElementById("container").innerHTML = tk.renderToSVG(1); 
             notes = document.getElementById("container").querySelectorAll("g.note");
             i = -1;
         }
-
+    
         fetch("../data/Beethoven__Symphony_No._9__Op._125-Clarinetto_1_in_C_(Clarinet).mxl")
         .then( response => response.arrayBuffer() )
         .then( data => {readData(data);} )
         .catch( e => {console.log( e );} );
-
+    
         const input = document.getElementById("input");
         input.addEventListener("change", readFile);
     
@@ -137,7 +140,7 @@ export default (() => {
             render();
         }
     }
-
+    
     function getCurrentNote() {
         const osmdNote = osmd.cursor.NotesUnderCursor()[0];
         if (osmdNote) {
@@ -149,7 +152,7 @@ export default (() => {
             return note;
         }
     }
-
+    
     function goToNextNote() {
         // Skip tied notes
         while ((osmd.cursor.NotesUnderCursor().length > 0) 
@@ -159,19 +162,19 @@ export default (() => {
         !== osmd.cursor.NotesUnderCursor()[0]) {
             osmd.cursor.next();
         }
-
+    
         osmd.cursor.next();
-
+    
         // Skip rests
         while ((osmd.cursor.NotesUnderCursor().length > 0) 
             && osmd.cursor.NotesUnderCursor()[0].isRest()) {
             osmd.cursor.next();
         }   
     }
-
+    
     function goToPreviousNote() {
         osmd.cursor.previous();
-
+    
         // Skip tied notes
         while ((osmd.cursor.NotesUnderCursor().length > 0) 
         && osmd.cursor.NotesUnderCursor()[0] 
@@ -180,15 +183,19 @@ export default (() => {
         !== osmd.cursor.NotesUnderCursor()[0]) {
             osmd.cursor.previous();
         }
-
+    
         // Skip rests
         while ((osmd.cursor.NotesUnderCursor().length > 0) 
             && osmd.cursor.NotesUnderCursor()[0].isRest()) {
             osmd.cursor.previous();
         }
     }
+    
+    document.addEventListener("DOMContentLoaded", () => {
+        verovio.module.onRuntimeInitialized = main;
+    });
 
-    return {main: main,
+    return {
         getCurrentNote: getCurrentNote, 
         goToNextNote: goToNextNote
     };
