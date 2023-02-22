@@ -1,4 +1,30 @@
 export default (() => {
+
+    let notes; let i;
+
+    function goToNextNote() {
+        // Remove the attribute 'playing' of all notes previously playing
+        let playingNotes = document.querySelectorAll('g.note.playing');
+        for (let playingNote of playingNotes) {
+            playingNote.classList.remove("playing");
+        }
+        i++;
+        if (i < notes.length) {
+            notes[i].classList.add("playing");
+        }
+    }
+
+    function getCurrentNote() {
+        let playingNotes = document.querySelectorAll('g.note.playing');
+        for (let playingNote of playingNotes) {
+            const note = {
+                pitch: playingNote.dataset.pname,
+                octave: +playingNote.dataset.oct
+            }
+            return note;
+        }
+    }
+
     function main() {
         const tk = new verovio.toolkit();
         console.log("Verovio has loaded!");
@@ -7,9 +33,7 @@ export default (() => {
             svgAdditionalAttribute: ["note@pname", "note@oct"],
             breaks: "none"
         });
-    
-        let notes; let i;
-    
+        
         function readData(data) {
             tk.loadZipDataBuffer(data);
             document.getElementById("container").innerHTML = tk.renderToSVG(1); 
@@ -71,6 +95,8 @@ export default (() => {
                 document.activeElement.blur();
             }
         }
+
+
         
         function moveCursor(e) {
             if (document.activeElement.nodeName !== 'INPUT') {
@@ -138,36 +164,8 @@ export default (() => {
         }
     }
     
-    function getCurrentNote() {
-        const osmdNote = osmd.cursor.NotesUnderCursor()[0];
-        if (osmdNote) {
-            const pitch = osmdNote.pitch;
-            const note = {
-                pitch: pitch.fundamentalNote + pitch.AccidentalHalfTones, 
-                octave: pitch.octave + 3,
-            }
-            return note;
-        }
-    }
-    
-    function goToNextNote() {
-        // Skip tied notes
-        while ((osmd.cursor.NotesUnderCursor().length > 0) 
-        && osmd.cursor.NotesUnderCursor()[0] 
-        && osmd.cursor.NotesUnderCursor()[0].tie
-        && osmd.cursor.NotesUnderCursor()[0].tie.Notes.at(-1)
-        !== osmd.cursor.NotesUnderCursor()[0]) {
-            osmd.cursor.next();
-        }
-    
-        osmd.cursor.next();
-    
-        // Skip rests
-        while ((osmd.cursor.NotesUnderCursor().length > 0) 
-            && osmd.cursor.NotesUnderCursor()[0].isRest()) {
-            osmd.cursor.next();
-        }   
-    }
+
+
     
     function goToPreviousNote() {
         osmd.cursor.previous();
@@ -193,7 +191,8 @@ export default (() => {
     });
 
     return {
-        getCurrentNote: getCurrentNote, 
+        main: main,
+        getCurrentNote: getCurrentNote,
         goToNextNote: goToNextNote
     };
 })();

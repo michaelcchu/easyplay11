@@ -14,6 +14,8 @@ export default (() => {
     let normalGain;
     let tuning;
 
+    const val = {"c":0,"d":2,"e":4,"f":5,"g":7,"a":9,"b":11,"#":1,"&":-1,"":0};
+
     function initialize() {
         if (!on) {oscillator.start(); on = true;}
         setGain();
@@ -28,8 +30,6 @@ export default (() => {
     }
 
     function setTuning() {
-        const val = {"c":0,"d":2,"e":4,"f":5,"g":7,"a":9,"b":11,"#":1,"&":-1,
-            "":0};
         tuning = {
             pitch: val[tuningPitch.value] + val[tuningAccidental.value],
             octave: +tuningOctave.value,
@@ -40,7 +40,7 @@ export default (() => {
     function startPlaying(note, activePress) {
         if (on) {
             function toFreq(note) {
-                return tuning.frequency * 2**((note.pitch - tuning.pitch)/12 
+                return tuning.frequency * 2**((val[note.pitch] - tuning.pitch)/12 
                     + note.octave - tuning.octave)
             }
 
