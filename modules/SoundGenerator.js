@@ -40,8 +40,8 @@ export default (() => {
     function startPlaying(note, activePress) {
         if (on) {
             function toFreq(note) {
-                return tuning.frequency * 2**((val[note.pitch] - tuning.pitch) 
-                    / 12 + note.octave - tuning.octave);
+                return tuning.frequency * 2**((note.pitch - tuning.pitch)/12 
+                    + note.octave - tuning.octave);
             }
 
             const freq = toFreq(note);

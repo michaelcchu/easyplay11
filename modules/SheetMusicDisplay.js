@@ -1,13 +1,20 @@
 export default (() => {
 
-    let notes; let i;
+    let notes; let i; let tk; let mei;
+
+    const val = {"c":0,"d":2,"e":4,"f":5,"g":7,"a":9,"b":11,"#":1,"&":-1,"":0};
+    const accidentalVal = {null:0,"s":1,"f":-1,"ss":2,"ff":-2,"n":0,"su":0.75,
+    "sd":0.25,"fu":-0.25,fd:-0.75}
 
     function getCurrentNote() {
         let playingNotes = document.querySelectorAll('g.note.playing');
         for (let playingNote of playingNotes) {
+            const id = playingNote.getAttribute("id");
+            const meiNote = mei.querySelector("[*|id='"+id+"']");
             const note = {
-                pitch: playingNote.dataset.pname,
-                octave: +playingNote.dataset.oct
+                pitch: val[meiNote.getAttribute("pname")] 
+                    + accidentalVal[meiNote.getAttribute("accid.ges")],
+                octave: +meiNote.getAttribute("oct")
             }
             return note;
         }
@@ -19,9 +26,12 @@ export default (() => {
         for (let playingNote of playingNotes) {
             playingNote.classList.remove("playing");
         }
-        i++;
         if (i < notes.length) {
-            notes[i].classList.add("playing");
+            i++;
+            if (i < notes.length) {
+                document.getElementById(notes[i].getAttribute("xml:id"))
+                .classList.add("playing");
+            }
         }
     }
 
@@ -31,26 +41,32 @@ export default (() => {
         for (let playingNote of playingNotes) {
             playingNote.classList.remove("playing");
         }
-        i--;
         if (i >= 0) {
-            notes[i].classList.add("playing");
+            i--;
+            if (i >= 0) {
+                document.getElementById(notes[i].getAttribute("xml:id"))
+                .classList.add("playing");    
+            }
         }
     }
 
     function main() {
-        const tk = new verovio.toolkit();
+        tk = new verovio.toolkit();
         console.log("Verovio has loaded!");
     
         tk.setOptions({
-            svgAdditionalAttribute: ["note@pname", "note@oct"],
             breaks: "none"
         });
         
         function readData(data) {
             tk.loadZipDataBuffer(data);
             document.getElementById("container").innerHTML = tk.renderToSVG(1); 
-            notes = document.getElementById("container").querySelectorAll("g.note");
             i = -1;
+            const meiContent = tk.getMEI();
+            const parser = new DOMParser();
+            mei = parser.parseFromString(meiContent, "text/xml");
+            console.log(mei);
+            notes = mei.querySelectorAll("note");
         }
     
         fetch("./data/Beethoven__Symphony_No._9__Op._125-Clarinetto_1_in_C_(Clarinet).mxl")
