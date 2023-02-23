@@ -70,7 +70,18 @@ export default (() => {
             const parser = new DOMParser();
             mei = parser.parseFromString(meiContent, "text/xml");
             console.log(mei);
-            notes = mei.querySelectorAll("note");
+            notes = Array.from(mei.querySelectorAll("note"));
+
+            // Remove tied notes
+            const ties = mei.querySelectorAll("tie");
+            for (const tie of ties) {
+                const skipNoteId = tie.getAttribute("endid").slice(1);
+                const skipNoteIndex = notes.findIndex((note) => {
+                    return (note.getAttribute("xml:id") === skipNoteId);
+                });
+                notes.splice(skipNoteIndex, 1);
+            }
+
         }
     
         fetch("./data/Beethoven__Symphony_No._9__Op._125-Clarinetto_1_in_C_(Clarinet).mxl")
