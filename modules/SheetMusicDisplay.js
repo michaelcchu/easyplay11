@@ -29,8 +29,10 @@ export default (() => {
         if (i < notes.length) {
             i++;
             if (i < notes.length) {
-                document.getElementById(notes[i].getAttribute("xml:id"))
-                .classList.add("playing");
+                const note = document.getElementById(
+                    notes[i].getAttribute("xml:id"));
+                note.classList.add("playing");
+                note.scrollIntoView();
             }
         }
     }
@@ -44,8 +46,10 @@ export default (() => {
         if (i >= 0) {
             i--;
             if (i >= 0) {
-                document.getElementById(notes[i].getAttribute("xml:id"))
-                .classList.add("playing");    
+                const note = document.getElementById(
+                    notes[i].getAttribute("xml:id"));
+                note.classList.add("playing");
+                note.scrollIntoView();  
             }
         }
     }
