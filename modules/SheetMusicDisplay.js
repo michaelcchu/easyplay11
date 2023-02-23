@@ -3,17 +3,25 @@ export default (() => {
     let notes; let i; let tk; let mei;
 
     const val = {"c":0,"d":2,"e":4,"f":5,"g":7,"a":9,"b":11,"#":1,"&":-1,"":0};
-    const accidentalVal = {null:0,"s":1,"f":-1,"ss":2,"ff":-2,"n":0,"su":0.75,
-    "sd":0.25,"fu":-0.25,fd:-0.75}
+    const accidentalVal = {null:0,"s":1,"f":-1,"ss":2,"x":2,"ff":-2,"xs":3,
+    "sx":3,"ts":3,"tf":-3,"n":0,"nf":0,"ns":0,
+    "su":0.75,"sd":0.25,"fu":-0.25,"fd":-0.75,"nu":0,"nd":0}
 
     function getCurrentNote() {
         let playingNotes = document.querySelectorAll('g.note.playing');
         for (let playingNote of playingNotes) {
             const id = playingNote.getAttribute("id");
             const meiNote = mei.querySelector("[*|id='"+id+"']");
+            let pitch = val[meiNote.getAttribute("pname")];
+            const accidGes = meiNote.getAttribute("accid.ges");
+            const accid = meiNote.getAttribute("accid");
+            if (accid) {
+                pitch += accidentalVal[accid];
+            } else {
+                pitch += accidentalVal[accidGes];
+            }
             const note = {
-                pitch: val[meiNote.getAttribute("pname")] 
-                    + accidentalVal[meiNote.getAttribute("accid.ges")],
+                pitch: pitch,
                 octave: +meiNote.getAttribute("oct")
             }
             return note;
