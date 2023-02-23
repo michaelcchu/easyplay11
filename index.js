@@ -35,18 +35,20 @@ function key(e) {
     if (["keydown","pointerdown"].includes(e.type)) {down(e);} else {up();}
 }
 
+// Initialize canvas
 const canvas = document.getElementById("tap-area");
 const context = canvas.getContext("2d");
 context.fillStyle="#FF0000";
 context.fillRect(0,0,canvas.width,canvas.height);
+canvas.style.width ='100%';
 
+// Event listeners
 const eventTypes = ["down","up"];
 for (const et of eventTypes) {document.addEventListener("key"+et, key);}
 for (const et of eventTypes) {canvas.addEventListener("pointer"+et, key,
     {passive: false});}
 
 // Turn off default event listeners
-
 canvas.addEventListener('focus', function(event) {
     event.preventDefault();
     event.stopPropagation();

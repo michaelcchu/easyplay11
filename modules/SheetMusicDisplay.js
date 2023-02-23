@@ -40,7 +40,7 @@ export default (() => {
                 const note = document.getElementById(
                     notes[i].getAttribute("xml:id"));
                 note.classList.add("playing");
-                note.scrollIntoView();
+                note.scrollIntoView(true);
             }
         }
     }
@@ -208,7 +208,6 @@ export default (() => {
     });
 
     return {
-        main: main,
         getCurrentNote: getCurrentNote,
         goToNextNote: goToNextNote
     };
