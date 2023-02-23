@@ -68,7 +68,8 @@ export default (() => {
     
         tk.setOptions({
             breaks: "none",
-            mnumInterval: 1
+            mnumInterval: 1,
+            scale: 75
         });
         
         function readData(data) {

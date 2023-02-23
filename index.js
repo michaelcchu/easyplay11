@@ -30,11 +30,16 @@ function key(e) {
     }
 
     if (e.type.includes("key")) {press = e.key;} 
-    else {press = e.changedTouches[0].identifier;}
-    if (["keydown","touchstart"].includes(e.type)) {down(e);} else {up();}
+    else {press = e.pointerId;}
+    if (["keydown","pointerdown"].includes(e.type)) {down(e);} else {up();}
 }
 
-const containerEventTypes = ["touchstart","touchend"];
-for (const et of containerEventTypes) {container.addEventListener(et, key);}
-const docEventTypes = ["keydown","keyup"];
-for (const et of docEventTypes) {document.addEventListener(et, key);}
+const canvas = document.getElementById("tap-area");
+const context = canvas.getContext("2d");
+context.fillStyle="#FF0000";
+context.fillRect(0,0,canvas.width,canvas.height);
+
+const eventTypes = ["down","up"];
+for (const et of eventTypes) {document.addEventListener("key"+et, key);}
+for (const et of eventTypes) {canvas.addEventListener("pointer"+et, key,
+    {passive: false});}
