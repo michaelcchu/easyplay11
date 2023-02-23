@@ -45,9 +45,14 @@ canvas.style.width ='100%';
 // Event listeners
 const eventTypes = ["down","up"];
 for (const et of eventTypes) {document.addEventListener("key"+et, key);}
+for (const et of eventTypes) {canvas.addEventListener("pointer"+et, key);}
+
+/*
 for (const et of eventTypes) {canvas.addEventListener("pointer"+et, key,
     {passive: false});}
+*/
 
+/*
 // Turn off default event listeners
 canvas.addEventListener('focus', function(event) {
     event.preventDefault();
@@ -114,3 +119,4 @@ canvas.addEventListener('focus', function(event) {
     event.preventDefault();
     event.stopPropagation();
   }, false);
+  */

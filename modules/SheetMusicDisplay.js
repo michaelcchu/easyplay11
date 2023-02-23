@@ -37,10 +37,15 @@ export default (() => {
         if (i < notes.length) {
             i++;
             if (i < notes.length) {
-                const note = document.getElementById(
-                    notes[i].getAttribute("xml:id"));
+                const id = notes[i].getAttribute("xml:id");
+                const note = document.getElementById(id);
+                const noteHead = note.querySelector(".notehead");
+                const noteHeadUse = noteHead.querySelector("use");
                 note.classList.add("playing");
-                note.scrollIntoView(true);
+                noteHeadUse.scrollIntoView({ block: "center"});
+
+                const topPos = noteHeadUse.getAttribute("y");
+                //document.getElementById('main').scrollTop = topPos;            }
             }
         }
     }
@@ -54,10 +59,13 @@ export default (() => {
         if (i >= 0) {
             i--;
             if (i >= 0) {
-                const note = document.getElementById(
-                    notes[i].getAttribute("xml:id"));
+                const id = notes[i].getAttribute("xml:id");
+                const note = document.getElementById(id);
                 note.classList.add("playing");
-                note.scrollIntoView();  
+                note.scrollIntoView({ block: "center"});
+                //const myElement = document.getElementById(id);
+                //const topPos = myElement.offsetTop;
+                //document.getElementById('main').scrollTop = topPos;
             }
         }
     }
