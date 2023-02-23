@@ -59,7 +59,8 @@ export default (() => {
         console.log("Verovio has loaded!");
     
         tk.setOptions({
-            breaks: "none"
+            breaks: "none",
+            mnumInterval: 1
         });
         
         function readData(data) {
