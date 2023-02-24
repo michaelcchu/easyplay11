@@ -40,7 +40,6 @@ const canvas = document.getElementById("tap-area");
 const context = canvas.getContext("2d");
 context.fillStyle="#FF0000";
 context.fillRect(0,0,canvas.width,canvas.height);
-canvas.style.width ='100%';
 
 // Event listeners
 const eventTypes = ["down","up"];
