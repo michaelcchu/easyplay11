@@ -42,15 +42,18 @@ export default (() => {
                 const noteHead = note.querySelector(".notehead");
                 const noteHeadUse = noteHead.querySelector("use");
                 note.classList.add("playing");
-
-                seamless.scrollIntoView(note, {
-                    behavior: "smooth",
-                    block: "start"
-                  },
-                  {
-                    duration: 250 // aprox. the duration that chrome uses,
-                  }
-                );
+                
+                function scroll() {
+                    seamless.scrollIntoView(note, {
+                        behavior: "smooth",
+                        block: "start"
+                      },
+                      {
+                        duration: 250 // aprox. the duration that chrome uses,
+                      }
+                    );    
+                }
+                setTimeout(scroll, 0);
 
                 //noteHeadUse.scrollIntoView({ block: "center"});
 
