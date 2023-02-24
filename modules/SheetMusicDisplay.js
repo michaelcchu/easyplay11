@@ -44,6 +44,8 @@ export default (() => {
                 note.classList.add("playing");
                 
                 function scroll() {
+                    note.scrollIntoView();
+                    /*
                     seamless.scrollIntoView(note, {
                         behavior: "smooth",
                         block: "start"
@@ -51,7 +53,7 @@ export default (() => {
                       {
                         duration: 250 // aprox. the duration that chrome uses,
                       }
-                    );    
+                    );*/    
                 }
                 setTimeout(scroll, 0);
 
