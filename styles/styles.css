@@ -17,7 +17,7 @@ g.note.playing {
 
 .main {
     grid-area: bottom;
-    /* overflow: scroll; */
+    overflow: scroll;
 }
 
 .footer {
