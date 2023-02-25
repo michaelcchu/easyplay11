@@ -48,7 +48,7 @@ for (const et of eventTypes) {canvas.addEventListener("pointer"+et, key,
     {passive: false});}
 */
 
-/*
+
 // Turn off default event listeners
 canvas.addEventListener('focus', function(event) {
     event.preventDefault();
@@ -115,4 +115,4 @@ canvas.addEventListener('focus', function(event) {
     event.preventDefault();
     event.stopPropagation();
   }, false);
-  */
+  
