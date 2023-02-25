@@ -112,8 +112,18 @@ export default (() => {
         zoomFactor.addEventListener("change", setZoom);
 
         let interval;
-        function repeat(f) {interval = setInterval(f, 200);}
-        function stopMoving() {clearInterval(interval);}
+        let cancelInterval;
+        
+        function repeat(f) {
+            f();
+            cancelInterval = false;
+            setTimeout(() => {
+                if (!cancelInterval) {
+                    interval = setInterval(f, 200);
+                }
+            },100);
+        }
+        function stopMoving() {clearInterval(interval); cancelInterval = true;}
 
         const left = document.getElementById("move-left");
         left.addEventListener("pointerdown", () => {repeat(goToPreviousNote);});
