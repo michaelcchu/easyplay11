@@ -14,6 +14,7 @@ g.note.playing {
     grid-area: middle;
     display: grid;
     align-items: center;
+    border-radius: 8px;
 }
 
 .main {
@@ -25,16 +26,19 @@ g.note.playing {
     grid-area: left;
     display: grid;
     align-items: center;
+    border-radius: 8px;
 }
 
 .right {
     grid-area: right;
     display: grid;
     align-items: center;
+    border-radius: 8px;
 }
 
 .footer {
     grid-area: footer;
+    border-radius: 8px;
 }
 
 .splash{
