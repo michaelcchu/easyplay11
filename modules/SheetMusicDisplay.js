@@ -107,17 +107,24 @@ export default (() => {
 
         let interval;
         let cancelInterval;
+        let timeoutInProgress = false;
 
         function repeat(f) {
             f();
             cancelInterval = false;
-            setTimeout(() => {
-                if (!cancelInterval) {
-                    interval = setInterval(f, 200);
-                }
-            }, 400);
+            if (!timeoutInProgress) {
+                setTimeout(() => {
+                    if (!cancelInterval) {
+                        interval = setInterval(f, 200);
+                    }
+                    timeoutInProgress = false;
+                }, 400);
+                timeoutInProgress = true;
+            }
         }
-        function stopMoving() {clearInterval(interval); cancelInterval = true;}
+        function stopMoving() {
+            clearInterval(interval); cancelInterval = true;
+        }
 
         const left = document.getElementById("move-left");
         left.addEventListener("pointerdown", () => {repeat(goToPreviousNote);});
