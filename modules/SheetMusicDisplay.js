@@ -115,7 +115,7 @@ export default (() => {
                 if (!cancelInterval) {
                     interval = setInterval(f, 200);
                 }
-            },100);
+            }, 400);
         }
         function stopMoving() {clearInterval(interval); cancelInterval = true;}
 
