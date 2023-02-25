@@ -50,69 +50,13 @@ for (const et of eventTypes) {canvas.addEventListener("pointer"+et, key,
 
 
 // Turn off default event listeners
-canvas.addEventListener('focus', function(event) {
+const ets = ['focus', 'pointerover', 'pointerenter', 'pointerdown', 
+  'touchstart', 'gotpointercapture', 'pointermove', 'touchmove', 'pointerup', 
+  'lostpointercapture', 'pointerout', 'pointerleave', 'touchend'];
+for (let et of ets) {
+  canvas.addEventListener(et, function(event) {
     event.preventDefault();
     event.stopPropagation();
   }, false); 
-
-//
-  canvas.addEventListener('pointerover', function(event) {
-    event.preventDefault();
-    event.stopPropagation();
-  }, false); 
-
-  canvas.addEventListener('pointerenter', function(event) {
-    event.preventDefault();
-    event.stopPropagation();
-  }, false); 
-
-  canvas.addEventListener('pointerdown', function(event) {
-    event.preventDefault();
-    event.stopPropagation();
-  }, false); 
-
-  canvas.addEventListener('touchstart', function(event) {
-    event.preventDefault();
-    event.stopPropagation();
-  }, false); 
-
-  canvas.addEventListener('gotpointercapture', function(event) {
-    event.preventDefault();
-    event.stopPropagation();
-  }, false);
-
-  canvas.addEventListener('pointermove', function(event) {
-    event.preventDefault();
-    event.stopPropagation();
-  }, false);
-
-  canvas.addEventListener('touchmove', function(event) {
-    event.preventDefault();
-    event.stopPropagation();
-  }, false);
-
-  canvas.addEventListener('pointerup', function(event) {
-    event.preventDefault();
-    event.stopPropagation();
-  }, false); 
-
-  canvas.addEventListener('lostpointercapture', function(event) {
-    event.preventDefault();
-    event.stopPropagation();
-  }, false); 
-
-  canvas.addEventListener('pointerout', function(event) {
-    event.preventDefault();
-    event.stopPropagation();
-  }, false); 
-
-  canvas.addEventListener('pointerleave', function(event) {
-    event.preventDefault();
-    event.stopPropagation();
-  }, false); 
-
-  canvas.addEventListener('touchend', function(event) {
-    event.preventDefault();
-    event.stopPropagation();
-  }, false);
+}
   

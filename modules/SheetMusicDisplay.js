@@ -173,6 +173,23 @@ export default (() => {
                 reader.readAsArrayBuffer(file);
             }
         }
+
+        // Turn off default event listeners
+        const ets = ['focus', 'pointerover', 'pointerenter', 'pointerdown', 
+            'touchstart', 'gotpointercapture', 'pointermove', 'touchmove', 
+            'pointerup', 'lostpointercapture', 'pointerout', 'pointerleave', 
+            'touchend'];
+        for (let et of ets) {
+            left.addEventListener(et, function(event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }, false);
+            right.addEventListener(et, function(event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }, false); 
+        }
+
     }
         
     document.addEventListener("DOMContentLoaded", () => {
