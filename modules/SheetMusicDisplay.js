@@ -39,21 +39,9 @@ export default (() => {
             if (i < notes.length) {
                 const id = notes[i].getAttribute("xml:id");
                 const note = document.getElementById(id);
-                const noteHead = note.querySelector(".notehead");
-                const noteHeadUse = noteHead.querySelector("use");
                 note.classList.add("playing");
-                
-                function scroll() {
-                    //note.scrollIntoView();
-                    seamless.scrollIntoView(note);
-                }
-                setTimeout(scroll, 0);
-
-                //noteHeadUse.scrollIntoView({ block: "center"});
-
-                const topPos = noteHeadUse.getAttribute("y");
-                //document.getElementById('main').scrollTop = topPos;            }
-            }
+                setTimeout(() => {seamless.scrollIntoView(note);}, 0);
+           }
         }
     }
 
@@ -70,9 +58,6 @@ export default (() => {
                 const note = document.getElementById(id);
                 note.classList.add("playing");
                 note.scrollIntoView({ block: "center"});
-                //const myElement = document.getElementById(id);
-                //const topPos = myElement.offsetTop;
-                //document.getElementById('main').scrollTop = topPos;
             }
         }
     }
@@ -125,11 +110,22 @@ export default (() => {
     
         const zoomFactor = document.getElementById("zoomFactor");
         zoomFactor.addEventListener("change", setZoom);
-    
+
+        let interval;
+        function repeat(f) {interval = setInterval(f, 200);}
+        function stopMoving() {clearInterval(interval);}
+
+        const left = document.getElementById("move-left");
+        left.addEventListener("pointerdown", () => {repeat(goToPreviousNote);});
+        left.addEventListener("pointerup", stopMoving);
+
+        const right = document.getElementById("move-right");
+        right.addEventListener("pointerdown", () => {repeat(goToNextNote);});
+        right.addEventListener("pointerup", stopMoving);
+
         document.addEventListener("keydown", moveCursor);
-    
+
         let loadPromise; let parts; let track;
-        //parse("./data/Aus_meines_Herzens_Grunde.mxl");
     
         function goToMeasure() {
             function getCurrentMeasure() {
@@ -179,7 +175,7 @@ export default (() => {
                    option.text = parts[i].nameLabel.text; select.add(option);
                }
                setTrack(null, true);
-           });       
+           });
         }
     
         function readFile() {    
