@@ -35,7 +35,6 @@ g.note.playing {
 
 .footer {
     grid-area: footer;
-    background-color: crimson;
 }
 
 .splash{
@@ -68,4 +67,5 @@ g.note.playing {
     grid-template-rows: auto auto 1fr 1fr;
     grid-template-columns: auto 1fr auto;
     height: calc(100vh - 16px);
+    grid-gap: 8px;
 }
