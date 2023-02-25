@@ -28,37 +28,39 @@ export default (() => {
         }
     }
 
-    function goToNextNote() {
+    function unhighlightCurrentNote() {
         // Remove the attribute 'playing' of all notes previously playing
         let playingNotes = document.querySelectorAll('g.note.playing');
         for (let playingNote of playingNotes) {
             playingNote.classList.remove("playing");
         }
+    }
+
+    function highlightCurrentNote() {
+        const id = notes[i].getAttribute("xml:id");
+        const note = document.getElementById(id);
+        note.classList.add("playing");
+        setTimeout(() => {
+            seamless.scrollIntoView(note, {
+                behavior: 'auto',
+                block: 'center',
+                inline: 'center'}
+            );}, 0);
+    }
+
+    function goToNextNote() {
+        unhighlightCurrentNote();
         if (i < notes.length) {
             i++;
-            if (i < notes.length) {
-                const id = notes[i].getAttribute("xml:id");
-                const note = document.getElementById(id);
-                note.classList.add("playing");
-                setTimeout(() => {seamless.scrollIntoView(note);}, 0);
-           }
+            if (i < notes.length) {highlightCurrentNote();}
         }
     }
 
     function goToPreviousNote() {
-        // Remove the attribute 'playing' of all notes previously playing
-        let playingNotes = document.querySelectorAll('g.note.playing');
-        for (let playingNote of playingNotes) {
-            playingNote.classList.remove("playing");
-        }
+        unhighlightCurrentNote();
         if (i >= 0) {
             i--;
-            if (i >= 0) {
-                const id = notes[i].getAttribute("xml:id");
-                const note = document.getElementById(id);
-                note.classList.add("playing");
-                setTimeout(() => {seamless.scrollIntoView(note);}, 0);
-            }
+            if (i >= 0) {highlightCurrentNote();}
         }
     }
 
