@@ -20,8 +20,17 @@ g.note.playing {
     overflow: scroll;
 }
 
+.left {
+    grid-area: left;
+}
+
+.right {
+    grid-area: right;
+}
+
 .footer {
     grid-area: footer;
+    background-color: crimson;
 }
 
 .splash{
@@ -46,10 +55,12 @@ g.note.playing {
 .wrapper {
     display: grid;
     grid-template-areas:
-        "top"
-        "middle"
-        "bottom"
-        "footer";
-    grid-template-rows: auto auto 1fr auto;
+        "top top top"
+        "middle middle middle"
+        "left bottom right"
+        "footer footer footer";
+    
+    grid-template-rows: auto auto 1fr 1fr;
+    grid-template-columns: auto 1fr auto;
     height: calc(100vh - 16px);
 }
