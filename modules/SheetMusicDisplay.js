@@ -57,7 +57,7 @@ export default (() => {
                 const id = notes[i].getAttribute("xml:id");
                 const note = document.getElementById(id);
                 note.classList.add("playing");
-                note.scrollIntoView({ block: "center"});
+                setTimeout(() => {seamless.scrollIntoView(note);}, 0);
             }
         }
     }
@@ -113,7 +113,7 @@ export default (() => {
 
         let interval;
         let cancelInterval;
-        
+
         function repeat(f) {
             f();
             cancelInterval = false;
