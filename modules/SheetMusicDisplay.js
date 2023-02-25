@@ -104,12 +104,6 @@ export default (() => {
     
         const go = document.getElementById("go");
         go.addEventListener("click", goToMeasure);
-    
-        const select = document.getElementById("select");
-        select.addEventListener("change", setTrack);
-    
-        const zoomFactor = document.getElementById("zoomFactor");
-        zoomFactor.addEventListener("change", setZoom);
 
         let interval;
         let cancelInterval;
@@ -134,8 +128,6 @@ export default (() => {
         right.addEventListener("pointerup", stopMoving);
 
         document.addEventListener("keydown", moveCursor);
-
-        let loadPromise; let parts; let track;
     
         function goToMeasure() {
             function getCurrentMeasure() {
@@ -174,53 +166,12 @@ export default (() => {
             }   
         }
     
-        function parse(text) {
-            loadPromise = osmd.load(text);
-            loadPromise.then(() => {
-               // replace the old track options with new track options 
-               while (select.options.length) {select.options.remove(0);}
-               parts = osmd.sheet.Instruments;
-               for (let i = 0; i < parts.length; i++) {
-                   const option = document.createElement("option");
-                   option.text = parts[i].nameLabel.text; select.add(option);
-               }
-               setTrack(null, true);
-           });
-        }
-    
         function readFile() {    
             for (const file of input.files) {
                 const reader = new FileReader();
                 reader.addEventListener("load", (e) => {readData(e.target.result)});
                 reader.readAsArrayBuffer(file);
             }
-        }
-    
-        function render(reset=false) {
-            if (loadPromise) {
-                loadPromise.then(() => {
-                    osmd.render();
-                    if (reset) {
-                        osmd.cursor.reset();
-                        osmd.cursor.previous();
-                    }
-                    osmd.cursor.show();
-                    document.activeElement.blur();
-                });
-            }
-        }
-    
-        function setTrack(e, reset=false) {
-            track = select.selectedIndex;
-            for (let i = 0; i < parts.length; i++) {
-                osmd.sheet.Instruments[i].Visible = (i === track);
-            }
-            render(reset);
-        }
-        
-        function setZoom() {
-            osmd.zoom = zoomFactor.value;
-            render();
         }
     }
         
