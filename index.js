@@ -52,11 +52,6 @@ for (const et of eventTypes) {document.addEventListener("key"+et, key);}
 for (const et of eventTypes) {canvas.addEventListener("pointer"+et, key,
   {passive: false});}
 
-/*
-for (const et of eventTypes) {canvas.addEventListener("pointer"+et, key,
-    {passive: false});}
-*/
-
 // Turn off default event listeners
 const ets = ['focus', 'pointerover', 'pointerenter', 'pointerdown', 
   'touchstart', 'gotpointercapture', 'pointermove', 'touchmove', 'pointerup', 
