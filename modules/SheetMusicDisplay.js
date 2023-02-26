@@ -117,12 +117,12 @@ export default (() => {
         go.addEventListener("click", goToMeasure);
 
         let interval;
-        let cancelInterval;
+        let cancelInterval = true;
         let timeoutInProgress = false;
 
         function repeat(f) {
             f();
-            if (!timeoutInProgress) {
+            if (!timeoutInProgress && cancelInterval) {
                 cancelInterval = false;
                 setTimeout(() => {
                     if (!cancelInterval) {
