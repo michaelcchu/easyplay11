@@ -117,25 +117,27 @@ export default (() => {
         go.addEventListener("click", goToMeasure);
 
         let interval;
-        let cancelInterval = true;
+        let cleanSlate = true;
         let timeoutInProgress = false;
 
         function repeat(f) {
-            if (!timeoutInProgress && cancelInterval) {
+            if (cleanSlate) {
                 f();
-                cancelInterval = false;
-                setTimeout(() => {
-                    if (!cancelInterval) {
-                        interval = setInterval(f, 200);
-                    }
-                    timeoutInProgress = false;
-                }, 400);
-                timeoutInProgress = true;
+                if (!timeoutInProgress) {
+                    cleanSlate = false;
+                    setTimeout(() => {
+                        if (!cleanSlate) {
+                            interval = setInterval(f, 200);
+                        }
+                        timeoutInProgress = false;
+                    }, 400);
+                    timeoutInProgress = true;    
+                }
             }
         }
 
         function stopMoving() {
-            clearInterval(interval); cancelInterval = true;
+            clearInterval(interval); cleanSlate = true;
         }
 
         const left = document.getElementById("move-left");
