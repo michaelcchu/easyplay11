@@ -40,6 +40,10 @@ export default (() => {
         const id = notes[i].getAttribute("xml:id");
         const note = document.getElementById(id);
         note.classList.add("playing");
+        scrollToNote(note);
+    }
+
+    function scrollToNote(note) {
         setTimeout(() => {
             seamless.scrollIntoView(note, {
                 behavior: 'auto',
@@ -73,7 +77,7 @@ export default (() => {
             mnumInterval: 1,
             scale: 75
         });
-        
+
         function readData(data) {
             tk.loadZipDataBuffer(data);
             document.getElementById("container").innerHTML = tk.renderToSVG(1); 
@@ -93,7 +97,12 @@ export default (() => {
                 });
                 notes.splice(skipNoteIndex, 1);
             }
-
+            
+            if (notes.length > 0) {
+                const id = notes[0].getAttribute("xml:id");
+                const note = document.getElementById(id);
+                scrollToNote(note);
+            }
         }
     
         fetch("./data/Beethoven__Symphony_No._9__Op._125-Clarinetto_1_in_C_(Clarinet).mxl")
