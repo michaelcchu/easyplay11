@@ -35,19 +35,27 @@ function key(e) {
     if (["keydown","pointerdown"].includes(e.type)) {down(e);} else {up();}
 }
 
+function resize() {
+  document.getElementsByClassName("wrapper")[0].style.height = 
+    (window.innerHeight - 17)  + "px";
+}
+
+resize();
+window.addEventListener('resize', resize);
+
 // Initialize canvas
 const canvas = document.getElementById("tap-area");
 
 // Event listeners
 const eventTypes = ["down","up"];
 for (const et of eventTypes) {document.addEventListener("key"+et, key);}
-for (const et of eventTypes) {canvas.addEventListener("pointer"+et, key);}
+for (const et of eventTypes) {canvas.addEventListener("pointer"+et, key,
+  {passive: false});}
 
 /*
 for (const et of eventTypes) {canvas.addEventListener("pointer"+et, key,
     {passive: false});}
 */
-
 
 // Turn off default event listeners
 const ets = ['focus', 'pointerover', 'pointerenter', 'pointerdown', 
@@ -57,6 +65,6 @@ for (let et of ets) {
   canvas.addEventListener(et, function(event) {
     event.preventDefault();
     event.stopPropagation();
-  }, false); 
+  }, {passive: false}); 
 }
   
