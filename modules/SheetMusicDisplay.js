@@ -121,8 +121,8 @@ export default (() => {
         let timeoutInProgress = false;
 
         function repeat(f) {
-            f();
             if (!timeoutInProgress && cancelInterval) {
+                f();
                 cancelInterval = false;
                 setTimeout(() => {
                     if (!cancelInterval) {
