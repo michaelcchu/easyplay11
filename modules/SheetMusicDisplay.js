@@ -122,8 +122,8 @@ export default (() => {
 
         function repeat(f) {
             f();
-            cancelInterval = false;
             if (!timeoutInProgress) {
+                cancelInterval = false;
                 setTimeout(() => {
                     if (!cancelInterval) {
                         interval = setInterval(f, 200);
@@ -133,6 +133,7 @@ export default (() => {
                 timeoutInProgress = true;
             }
         }
+
         function stopMoving() {
             clearInterval(interval); cancelInterval = true;
         }
