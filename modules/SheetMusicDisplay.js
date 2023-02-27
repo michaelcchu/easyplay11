@@ -71,11 +71,14 @@ export default (() => {
     function main() {
         tk = new verovio.toolkit();
         console.log("Verovio has loaded!");
-    
+
+        const zoomFactor = document.getElementById("zoomFactor");
+        zoomFactor.addEventListener("change", setZoom);    
+
         tk.setOptions({
             breaks: "none",
             mnumInterval: 1,
-            scale: 75
+            scale: +zoomFactor.value
         });
 
         function readData(data) {
@@ -115,9 +118,6 @@ export default (() => {
     
         const go = document.getElementById("go");
         go.addEventListener("click", goToMeasure);
-
-        const zoomFactor = document.getElementById("zoomFactor");
-        zoomFactor.addEventListener("change", setZoom);    
 
         let interval;
         let cleanSlate = true;
@@ -215,6 +215,19 @@ export default (() => {
         function setZoom() {
             tk.setOptions({scale: +zoomFactor.value});
             document.getElementById("container").innerHTML = tk.renderToSVG(1);
+            setTimeout(() => {
+                if (notes.length > 0) {
+                    let noteIndex;
+                    if (i < 0) { noteIndex = 0; }
+                    else if (i >= notes.length) {noteIndex = notes.length - 1;}
+                    else {noteIndex = i;}
+                    const meiNote = notes[noteIndex];
+                    const id = meiNote.getAttribute("xml:id");
+                    const svgNote = document.getElementById(id);
+                    scrollToNote(svgNote);
+                }    
+            }, 0);
+
             document.activeElement.blur(); 
         }
 
