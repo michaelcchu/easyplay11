@@ -116,6 +116,9 @@ export default (() => {
         const go = document.getElementById("go");
         go.addEventListener("click", goToMeasure);
 
+        const zoomFactor = document.getElementById("zoomFactor");
+        zoomFactor.addEventListener("change", setZoom);    
+
         let interval;
         let cleanSlate = true;
         let timeoutInProgress = false;
@@ -207,6 +210,12 @@ export default (() => {
                 reader.addEventListener("load", (e) => {readData(e.target.result)});
                 reader.readAsArrayBuffer(file);
             }
+        }
+
+        function setZoom() {
+            tk.setOptions({scale: +zoomFactor.value});
+            document.getElementById("container").innerHTML = tk.renderToSVG(1);
+            document.activeElement.blur(); 
         }
 
         // Turn off default event listeners
