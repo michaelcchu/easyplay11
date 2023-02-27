@@ -152,10 +152,7 @@ export default (() => {
     
         function goToMeasure() {
             function getMeasure(note) {
-                const layer = note.parentNode;
-                const staff = layer.parentNode;
-                const measure = staff.parentNode;                
-                return +measure.getAttribute("n");
+                return +note.closest("measure").getAttribute("n");
             }
 
             unhighlightCurrentNote();
