@@ -151,33 +151,50 @@ export default (() => {
         document.addEventListener("keydown", moveCursor);
     
         function goToMeasure() {
+            function getMeasure(note) {
+                const layer = note.parentNode;
+                const staff = layer.parentNode;
+                const measure = staff.parentNode;                
+                return +measure.getAttribute("n");
+            }
+
+            unhighlightCurrentNote();
+
             function getCurrentMeasure() {
-                return osmd.cursor.iterator.currentMeasure.measureNumber;
-            }
-            if (osmd.cursor) {
-                let measure = +measureInput.value;
-                const first = osmd.sheet.FirstMeasureNumber;
-                const last = osmd.sheet.LastMeasureNumber;
-                if (measure < first) {
-                    measure = first;
-                } else if (measure > last) {
-                    measure = last;
-                }
-                if (getCurrentMeasure() < measure) {
-                    while (getCurrentMeasure() < measure) {osmd.cursor.next();}
-                    osmd.cursor.previous();
-                } else if (getCurrentMeasure() > measure) {
-                    if (measure === 1) {
-                        osmd.cursor.reset();
-                        osmd.cursor.previous();
+                if (i < 0) {
+                    if (notes.length > 0) {
+                        return -1;
                     } else {
-                        while (getCurrentMeasure() > measure - 1) {
-                            osmd.cursor.previous();
-                        }
+                        return null;
                     }
+                } else if (i >= notes.length) {
+                    if (notes.length > 0) {
+                        return getMeasure(notes[notes.length - 1]);
+                    } else {
+                        return null;
+                    }
+                } else {
+                    return getMeasure(notes[i]);
                 }
-                document.activeElement.blur();
             }
+
+            const measureInput = document.getElementById("measureInput");
+            let measure = +measureInput.value;
+            
+            if (notes.length > 0) {
+                const lastMeasure = getMeasure(notes[notes.length - 1]);
+                if (measure > lastMeasure) {
+                    measure = lastMeasure;
+                }
+
+                while (getCurrentMeasure() < measure) {i++;}
+                while (getCurrentMeasure() > measure) {i--;}
+                
+                highlightCurrentNote();
+    
+            }
+
+            document.activeElement.blur();
         }
 
         function moveCursor(e) {

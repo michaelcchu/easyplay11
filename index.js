@@ -4,7 +4,6 @@ import SheetMusicDisplay from './modules/SheetMusicDisplay.js';
 let activePress = null; let press;
 
 function key(e) {
-    e.preventDefault();
     function down(e) {
         const strPress = "" + press;
         const badKeys = ["Alt","Arrow","Audio","Enter","Home","Launch","Meta",
