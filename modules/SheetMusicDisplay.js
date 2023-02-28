@@ -248,10 +248,8 @@ export default (() => {
         }
 
     }
-        
-    document.addEventListener("DOMContentLoaded", () => {
-        verovio.module.onRuntimeInitialized = main;
-    });
+
+    window.addEventListener("load", () => {main();});
 
     return {
         getCurrentNote: getCurrentNote,
