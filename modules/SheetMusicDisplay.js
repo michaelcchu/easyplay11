@@ -220,7 +220,7 @@ export default (() => {
                     let noteIndex;
                     if (i < 0) { noteIndex = 0; }
                     else if (i >= notes.length) {noteIndex = notes.length - 1;}
-                    else {noteIndex = i;}
+                    else {noteIndex = i; highlightCurrentNote();}
                     const meiNote = notes[noteIndex];
                     const id = meiNote.getAttribute("xml:id");
                     const svgNote = document.getElementById(id);
