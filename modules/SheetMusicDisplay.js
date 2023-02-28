@@ -249,7 +249,11 @@ export default (() => {
 
     }
 
-    window.addEventListener("load", () => {main();});
+    const body = document.getElementsByTagName('body')[0];
+    const script = document.createElement('script');
+    script.src ="./verovio-toolkit-wasm.js";
+    script.onload = () => {verovio.module.onRuntimeInitialized = main;}
+    body.appendChild(script);
 
     return {
         getCurrentNote: getCurrentNote,
