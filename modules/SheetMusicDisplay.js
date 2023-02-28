@@ -81,8 +81,7 @@ export default (() => {
             scale: +zoomFactor.value
         });
 
-        function readData(data) {
-            tk.loadZipDataBuffer(data);
+        function setup() {
             document.getElementById("container").innerHTML = tk.renderToSVG(1); 
             i = -1;
             const meiContent = tk.getMEI();
@@ -110,7 +109,7 @@ export default (() => {
     
         fetch("./data/Beethoven__Symphony_No._9__Op._125-Clarinetto_1_in_C_(Clarinet).mxl")
         .then( response => response.arrayBuffer() )
-        .then( data => {readData(data);} )
+        .then( data => {tk.loadZipDataBuffer(data); setup();} )
         .catch( e => {console.log( e );} );
     
         const input = document.getElementById("input");
@@ -207,8 +206,21 @@ export default (() => {
         function readFile() {    
             for (const file of input.files) {
                 const reader = new FileReader();
-                reader.addEventListener("load", (e) => {readData(e.target.result)});
-                reader.readAsArrayBuffer(file);
+                const name = file.name.toLowerCase();
+                if (name.endsWith(".musicxml") || name.endsWith(".xml") ||
+                    name.endsWith(".mei")) {
+                    reader.addEventListener("load", (e) => {
+                        tk.loadData(e.target.result);
+                        setup();
+                    });
+                    reader.readAsText(file);
+                } else if (name.endsWith(".mxl")) {
+                    reader.addEventListener("load", (e) => {
+                        tk.loadZipDataBuffer(e.target.result);
+                        setup();
+                    });
+                    reader.readAsArrayBuffer(file);
+                }
             }
         }
 
