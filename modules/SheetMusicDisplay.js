@@ -45,10 +45,11 @@ export default (() => {
         const notehead = note.querySelector('.notehead')
         note.classList.add("playing")
         notehead.classList.add("playing")
-        scrollToNote(notehead)
+        scrollToNote(note)
     }
 
-    function scrollToNote(notehead) {
+    function scrollToNote(note) {
+        const notehead = note.querySelector('.notehead')
         const bbox = notehead.getBBox();
         const svg = document.querySelector('svg');
         const point = svg.createSVGPoint();
