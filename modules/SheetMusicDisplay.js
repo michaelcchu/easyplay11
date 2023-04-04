@@ -59,8 +59,8 @@ export default (() => {
         const maxX = divPosition.right;
         const midX = (minX + maxX)/2;
 
-        if (newPoint.x < minX) {
-            scrollableDiv.scrollLeft -= minX - newPoint.x
+        if (newPoint.x < midX) {
+            scrollableDiv.scrollLeft -= midX - newPoint.x
         } else if (newPoint.x > midX) {
             scrollableDiv.scrollLeft += newPoint.x - midX
         }
