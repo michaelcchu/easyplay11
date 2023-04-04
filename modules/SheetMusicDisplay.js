@@ -60,7 +60,7 @@ export default (() => {
         const midX = (minX + maxX)/2;
 
         if (newPoint.x < minX) {
-            scrollableDiv.scrollLeft -= minX - x
+            scrollableDiv.scrollLeft -= minX - newPoint.x
         } else if (newPoint.x > midX) {
             scrollableDiv.scrollLeft += newPoint.x - midX
         }
