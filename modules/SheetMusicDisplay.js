@@ -31,27 +31,31 @@ export default (() => {
 
     function unhighlightCurrentNote() {
         // Remove the attribute 'playing' of all notes previously playing
-        let playingNotes = document.querySelectorAll('g.note.playing');
-        for (let playingNote of playingNotes) {
-            playingNote.classList.remove("playing");
+        for (let name of ['notehead','note']) {
+            let playingNotes = document.querySelectorAll('g.'+name+'.playing');
+            for (let playingNote of playingNotes) {
+                playingNote.classList.remove("playing");
+            }
         }
     }
 
     function highlightCurrentNote() {
         const id = notes[i].getAttribute("xml:id");
         const note = document.getElementById(id);
-        note.classList.add("playing");
-        scrollToNote(note);
+        const notehead = note.querySelector('.notehead')
+        note.classList.add("playing")
+        notehead.classList.add("playing")
+        scrollToNote(notehead)
     }
 
-    function scrollToNote(note) {
-        const bbox = note.getBBox();
+    function scrollToNote(notehead) {
+        const bbox = notehead.getBBox();
         const svg = document.querySelector('svg');
         const point = svg.createSVGPoint();
         point.x = bbox.x;
         point.y = bbox.y;
 
-        const ctm = note.getScreenCTM();
+        const ctm = notehead.getScreenCTM();
         const newPoint = point.matrixTransform(ctm);
         const x = newPoint.x
         const y = newPoint.y
