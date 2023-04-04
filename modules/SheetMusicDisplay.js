@@ -53,17 +53,17 @@ export default (() => {
 
         const ctm = note.getScreenCTM();
         const newPoint = point.matrixTransform(ctm);
+        const x = newPoint.x
+        const y = newPoint.y
 
         const divPosition = scrollableDiv.getBoundingClientRect();
-        const minX = divPosition.left;
-        const maxX = divPosition.right;
-        const midX = (minX + maxX)/2;
+        const midX = (divPosition.left + divPosition.right) / 2
+        const midY = (divPosition.top + divPosition.bottom) / 2
 
-        if (newPoint.x < midX) {
-            scrollableDiv.scrollLeft -= midX - newPoint.x
-        } else if (newPoint.x > midX) {
-            scrollableDiv.scrollLeft += newPoint.x - midX
-        }
+        if (x < midX) {scrollableDiv.scrollLeft -= midX - x} 
+        else if (x > midX) {scrollableDiv.scrollLeft += x - midX}
+        if (y < midY) {scrollableDiv.scrollTop -= midY - y} 
+        else if (y > midY) {scrollableDiv.scrollTop += y - midY}
     }
 
     function goToNextNote() {
