@@ -6,6 +6,7 @@ export default (() => {
     const accidentalVal = {null:0,"s":1,"f":-1,"ss":2,"x":2,"ff":-2,"xs":3,
     "sx":3,"ts":3,"tf":-3,"n":0,"nf":0,"ns":0,
     "su":0.75,"sd":0.25,"fu":-0.25,"fd":-0.75,"nu":0,"nd":0}
+    const scrollableDiv = document.querySelector(".main");
 
     function getCurrentNote() {
         let playingNotes = document.querySelectorAll('g.note.playing');
@@ -44,12 +45,67 @@ export default (() => {
     }
 
     function scrollToNote(note) {
+        //console.log(note);
+        const notePosition = note.getBoundingClientRect();
+        const x = notePosition.x;
+        const y = notePosition.y;
+
+        const divPosition = scrollableDiv.getBoundingClientRect();
+        const minX = divPosition.left;
+        const maxX = divPosition.right;
+
+        console.log(minX,x,maxX)
+
+        if (x < minX) {
+            scrollableDiv.scrollLeft -= minX - x
+        } else if (x > maxX) {
+            scrollableDiv.scrollLeft += x - maxX
+        }
+
+        console.log(scrollableDiv.scrollLeft)
+
+//        if clientRect.x
+ 
+/*
+        const bbox = note.getBBox();
+        const x = bbox.x;
+        const y = bbox.y;
+
+        const svg = document.querySelector('svg');
+        const point = svg.createSVGPoint();
+        point.x = x;
+        point.y = y;
+        console.log(x,y,clientRect.x,clientRect.y);
+
+        const ctm = note.getScreenCTM().inverse();
+        const newPoint = point.matrixTransform(ctm);
+*/
+        //const svgWidth = document.querySelector('svg').width.baseVal.value;
+        
+        //const svgWidth = document.querySelector('svg').getBBox().width;
+        //const divWidth = scrollableDiv.scrollWidth;
+        //console.log(x,y,(x / svgWidth) * divWidth);
+        //scrollableDiv.scrollLeft = (x / svgWidth) * divWidth;
+        
+        //scrollableDiv.scrollLeft = newPoint.x;
+        
+        //console.log(newPoint.x);
+        // doesn't work
+        //note.scrollIntoView();
+        /* doesn't work
         setTimeout(() => {
-            seamless.scrollIntoView(note, {
+            note.scrollIntoView({
                 behavior: 'auto',
                 block: 'center',
                 inline: 'center'}
             );}, 0);
+        */
+        /* temporarily turn off scrolling*/
+        /*
+        setTimeout(() => {
+            seamless.scrollIntoView(note);
+        }, 0);
+        */
     }
 
     function goToNextNote() {
