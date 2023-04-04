@@ -52,7 +52,8 @@ export default (() => {
             }
     
             if (activePress === null) {
-                oscillator.frequency.value = freq;
+                oscillator.frequency.setTargetAtTime(freq, 
+                    audioContext.currentTime, 0);   
             } else {
                 oscillator.frequency.setTargetAtTime(freq, 
                     audioContext.currentTime, 0.003);   
