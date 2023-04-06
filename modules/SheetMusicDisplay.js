@@ -263,7 +263,7 @@ export default (() => {
                 const reader = new FileReader();
                 const name = file.name.toLowerCase();
                 if (name.endsWith(".musicxml") || name.endsWith(".xml") ||
-                    name.endsWith(".mei")) {
+                    name.endsWith(".mei") || name.endsWith(".krn")) {
                     reader.addEventListener("load", (e) => {
                         tk.loadData(e.target.result);
                         setup();
@@ -318,7 +318,7 @@ export default (() => {
 
     const body = document.getElementsByTagName('body')[0];
     const script = document.createElement('script');
-    script.src ="./verovio-toolkit-wasm.js";
+    script.src ="./verovio-toolkit-hum.js";
     script.onload = () => {verovio.module.onRuntimeInitialized = main;}
     body.appendChild(script);
 
