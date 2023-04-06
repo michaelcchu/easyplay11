@@ -1,6 +1,6 @@
 export default (() => {
 
-    let notes; let i; let tk; let mei;
+    let notes; let i; let tk; let mei; let staveData; let staveNumber;
 
     const val = {"c":0,"d":2,"e":4,"f":5,"g":7,"a":9,"b":11,"#":1,"&":-1,"":0};
     const accidentalVal = {null:0,"s":1,"f":-1,"ss":2,"x":2,"ff":-2,"xs":3,
@@ -111,45 +111,29 @@ export default (() => {
 
         function setup() {
             document.getElementById("container").innerHTML = tk.renderToSVG(1); 
-            i = -1;
             const meiContent = tk.getMEI();
             const parser = new DOMParser();
             mei = parser.parseFromString(meiContent, "text/xml");
             console.log(mei);
 
-            const stave_data = {};
+            staveData = {};
             const staves = mei.querySelectorAll('staff');
+            console.log(staves);
             for (let stave of staves) {
                 const n = stave.getAttribute("n");
-                if (!(n in stave_data)) {stave_data[n] = [];}
+                if (!(n in staveData)) {staveData[n] = [];}
                 const notes = stave.querySelectorAll('note');
-                for (let note of notes) {stave_data[n].push(note);}
+                for (let note of notes) {staveData[n].push(note);}
             }
-            console.log(stave_data);
+            console.log(staveData);
 
             while (select.options.length) {select.options.remove(0);}
-            for (let key in stave_data) {
+            for (let key in staveData) {
                 const option = document.createElement("option");
                 option.text = key; select.add(option);
             }
-            
-            notes = Array.from(mei.querySelectorAll("note"));
 
-            // Remove tied notes
-            const ties = mei.querySelectorAll("tie");
-            for (const tie of ties) {
-                const skipNoteId = tie.getAttribute("endid").slice(1);
-                const skipNoteIndex = notes.findIndex((note) => {
-                    return (note.getAttribute("xml:id") === skipNoteId);
-                });
-                notes.splice(skipNoteIndex, 1);
-            }
-            
-            if (notes.length > 0) {
-                const id = notes[0].getAttribute("xml:id");
-                const note = document.getElementById(id);
-                scrollToNote(note);
-            }
+            setTrack();
         }
     
         fetch("./data/Beethoven__Symphony_No._9__Op._125-Clarinetto_1_in_C_(Clarinet).mxl")
@@ -192,7 +176,26 @@ export default (() => {
         document.addEventListener("keydown", moveCursor);
 
         function setTrack() {
-            // todo: implement this
+            i = -1;
+
+            staveNumber = select.options[select.selectedIndex].text;
+            notes = staveData[staveNumber];
+
+            // Remove tied notes
+            const ties = mei.querySelectorAll("tie");
+            for (const tie of ties) {
+                const skipNoteId = tie.getAttribute("endid").slice(1);
+                const skipNoteIndex = notes.findIndex((note) => {
+                    return (note.getAttribute("xml:id") === skipNoteId);
+                });
+                notes.splice(skipNoteIndex, 1);
+            }
+            
+            if (notes.length > 0) {
+                const id = notes[0].getAttribute("xml:id");
+                const note = document.getElementById(id);
+                scrollToNote(note);
+            }
         }
     
         function goToMeasure() {
