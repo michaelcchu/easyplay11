@@ -107,6 +107,21 @@ export default (() => {
             const parser = new DOMParser();
             mei = parser.parseFromString(meiContent, "text/xml");
             console.log(mei);
+            
+            const measures = Array.from(mei.querySelectorAll("measure"));
+            const measure_data = [];
+            for (let measure of measures) {
+                const stave_data = [];
+                const staves = measure.querySelectorAll('staff');
+                for (let stave of staves) {
+                    const note_data = stave.querySelectorAll('note');
+                    const notes = Array.from(note_data);
+                    stave_data.push(notes);
+                }
+                measure_data.push(stave_data);
+            }
+            console.log(measure_data);
+
             notes = Array.from(mei.querySelectorAll("note"));
 
             // Remove tied notes
