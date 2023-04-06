@@ -94,6 +94,14 @@ export default (() => {
         const go = document.getElementById("go");
         go.addEventListener("click", goToMeasure);
 
+        const library = document.getElementById("library");
+        // Set library options
+        for (let i = 1; i <= 371; i++) {
+            const option = document.createElement("option");
+            option.text = i; library.add(option);
+        }
+        library.addEventListener("change", loadChorale);
+
         const select = document.getElementById("select");
         select.addEventListener("change", setTrack);
 
@@ -155,30 +163,9 @@ export default (() => {
             setTrack();
         }
     
-        // const url = "./data/Beethoven__Symphony_No._9__Op._125-Clarinetto_1_in_C_(Clarinet).mxl";
-        // const url = "https://kern.humdrum.org/cgi-bin/ksdata?file=chor001.krn&l=users/craig/classical/bach/371chorales&format=kern";
-        const url = "https://raw.githubusercontent.com/craigsapp/bach-370-chorales/master/kern/chor001.krn";
+        loadChorale();
 
-        fetch(url)
-        .then( response => {
-            if (url.endsWith(".musicxml") || url.endsWith(".xml") ||
-            url.endsWith(".mei") || url.endsWith(".krn")) {
-                return response.text();
-            } else if (url.endsWith(".mxl")) {
-                return response.arrayBuffer(); 
-            } 
-        })
-        .then( data => {
-            if (url.endsWith(".musicxml") || url.endsWith(".xml") ||
-            url.endsWith(".mei") || url.endsWith(".krn")) {
-                tk.loadData(data);
-            } else if (url.endsWith(".mxl")) {
-                tk.loadZipDataBuffer(data); 
-            }
-            setup();
-        })
-        .catch( e => {console.log( e );} );
-
+        // code for left and right navigation buttons
         let interval;
         let cleanSlate = true;
         let timeoutInProgress = false;
@@ -213,6 +200,35 @@ export default (() => {
 
         document.addEventListener("keydown", moveCursor);
 
+        function loadChorale() {
+            let choraleNumber = library.options[library.selectedIndex].text;
+            choraleNumber = ("00" + choraleNumber).slice(-3);
+            // const url = "./data/Beethoven__Symphony_No._9__Op._125-Clarinetto_1_in_C_(Clarinet).mxl";
+            // const url = "https://kern.humdrum.org/cgi-bin/ksdata?file=chor001.krn&l=users/craig/classical/bach/371chorales&format=kern";
+            const url = "https://raw.githubusercontent.com/craigsapp/bach-370-chorales/master/kern/chor" 
+                + choraleNumber + ".krn";
+
+            fetch(url)
+            .then( response => {
+                if (url.endsWith(".musicxml") || url.endsWith(".xml") ||
+                url.endsWith(".mei") || url.endsWith(".krn")) {
+                    return response.text();
+                } else if (url.endsWith(".mxl")) {
+                    return response.arrayBuffer(); 
+                } 
+            })
+            .then( data => {
+                if (url.endsWith(".musicxml") || url.endsWith(".xml") ||
+                url.endsWith(".mei") || url.endsWith(".krn")) {
+                    tk.loadData(data);
+                } else if (url.endsWith(".mxl")) {
+                    tk.loadZipDataBuffer(data); 
+                }
+                setup();
+            })
+            .catch( e => {console.log( e );} );            
+        }
+        
         function setTrack() {
             i = -1;
 
