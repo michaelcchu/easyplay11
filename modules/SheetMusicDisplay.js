@@ -175,7 +175,6 @@ export default (() => {
             } else if (url.endsWith(".mxl")) {
                 tk.loadZipDataBuffer(data); 
             }
-            console.log(data)
             setup();
         })
         .catch( e => {console.log( e );} );
