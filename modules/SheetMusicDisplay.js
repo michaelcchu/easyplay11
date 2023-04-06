@@ -160,11 +160,22 @@ export default (() => {
         const url = "https://raw.githubusercontent.com/craigsapp/bach-370-chorales/master/kern/chor001.krn";
 
         fetch(url)
-        .then( response => response.text() ) //response.arrayBuffer() )
+        .then( response => {
+            if (url.endsWith(".musicxml") || url.endsWith(".xml") ||
+            url.endsWith(".mei") || url.endsWith(".krn")) {
+                return response.text();
+            } else if (url.endsWith(".mxl")) {
+                return response.arrayBuffer(); 
+            } 
+        })
         .then( data => {
+            if (url.endsWith(".musicxml") || url.endsWith(".xml") ||
+            url.endsWith(".mei") || url.endsWith(".krn")) {
+                tk.loadData(data);
+            } else if (url.endsWith(".mxl")) {
+                tk.loadZipDataBuffer(data); 
+            }
             console.log(data)
-            tk.loadData(data); 
-            //tk.loadZipDataBuffer(data); 
             setup();
         })
         .catch( e => {console.log( e );} );
