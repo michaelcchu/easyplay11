@@ -88,11 +88,20 @@ export default (() => {
     }
 
     function main() {
-        tk = new verovio.toolkit();
-        console.log("Verovio has loaded!");
+        const input = document.getElementById("input");
+        input.addEventListener("change", readFile);
+    
+        const go = document.getElementById("go");
+        go.addEventListener("click", goToMeasure);
+
+        const select = document.getElementById("select");
+        select.addEventListener("change", setTrack);
 
         const zoomFactor = document.getElementById("zoomFactor");
-        zoomFactor.addEventListener("change", setZoom);    
+        zoomFactor.addEventListener("change", setZoom);
+
+        tk = new verovio.toolkit();
+        console.log("Verovio has loaded!"); 
 
         tk.setOptions({
             breaks: "none",
@@ -108,7 +117,21 @@ export default (() => {
             mei = parser.parseFromString(meiContent, "text/xml");
             console.log(mei);
 
-            
+            const stave_data = {};
+            const staves = mei.querySelectorAll('staff');
+            for (let stave of staves) {
+                const n = stave.getAttribute("n");
+                if (!(n in stave_data)) {stave_data[n] = [];}
+                const notes = stave.querySelectorAll('note');
+                for (let note of notes) {stave_data[n].push(note);}
+            }
+            console.log(stave_data);
+
+            while (select.options.length) {select.options.remove(0);}
+            for (let key in stave_data) {
+                const option = document.createElement("option");
+                option.text = key; select.add(option);
+            }
             
             notes = Array.from(mei.querySelectorAll("note"));
 
@@ -133,12 +156,6 @@ export default (() => {
         .then( response => response.arrayBuffer() )
         .then( data => {tk.loadZipDataBuffer(data); setup();} )
         .catch( e => {console.log( e );} );
-    
-        const input = document.getElementById("input");
-        input.addEventListener("change", readFile);
-    
-        const go = document.getElementById("go");
-        go.addEventListener("click", goToMeasure);
 
         let interval;
         let cleanSlate = true;
@@ -173,6 +190,10 @@ export default (() => {
         right.addEventListener("pointerup", stopMoving);
 
         document.addEventListener("keydown", moveCursor);
+
+        function setTrack() {
+            // todo: implement this
+        }
     
         function goToMeasure() {
             function getMeasure(note) {
