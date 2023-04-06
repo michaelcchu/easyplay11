@@ -155,9 +155,18 @@ export default (() => {
             setTrack();
         }
     
-        fetch("./data/Beethoven__Symphony_No._9__Op._125-Clarinetto_1_in_C_(Clarinet).mxl")
-        .then( response => response.arrayBuffer() )
-        .then( data => {tk.loadZipDataBuffer(data); setup();} )
+        // const url = "./data/Beethoven__Symphony_No._9__Op._125-Clarinetto_1_in_C_(Clarinet).mxl";
+        // const url = "https://kern.humdrum.org/cgi-bin/ksdata?file=chor001.krn&l=users/craig/classical/bach/371chorales&format=kern";
+        const url = "https://raw.githubusercontent.com/craigsapp/bach-370-chorales/master/kern/chor001.krn";
+
+        fetch(url)
+        .then( response => response.text() ) //response.arrayBuffer() )
+        .then( data => {
+            console.log(data)
+            tk.loadData(data); 
+            //tk.loadZipDataBuffer(data); 
+            setup();
+        })
         .catch( e => {console.log( e );} );
 
         let interval;
