@@ -110,23 +110,42 @@ export default (() => {
         });
 
         function setup() {
-            document.getElementById("container").innerHTML = tk.renderToSVG(1); 
+            // Render the SVG
+            document.getElementById("container").innerHTML = tk.renderToSVG(1);
+            
+            // Get the MEI
             const meiContent = tk.getMEI();
             const parser = new DOMParser();
             mei = parser.parseFromString(meiContent, "text/xml");
             console.log(mei);
 
+            // Find notes by stave
             staveData = {};
             const staves = mei.querySelectorAll('staff');
-            console.log(staves);
             for (let stave of staves) {
                 const n = stave.getAttribute("n");
                 if (!(n in staveData)) {staveData[n] = [];}
                 const notes = stave.querySelectorAll('note');
                 for (let note of notes) {staveData[n].push(note);}
             }
-            console.log(staveData);
 
+            // Remove tied notes
+            const ties = mei.querySelectorAll("tie");
+            for (const tie of ties) {
+                const skipNoteId = tie.getAttribute("endid").slice(1);
+                for (let key in staveData) {
+                    const stave = staveData[key];
+                    const skipNoteIndex = stave.findIndex((note) => {
+                        return (note.getAttribute("xml:id") === skipNoteId);
+                    });
+                    if (skipNoteIndex > -1) {
+                        stave.splice(skipNoteIndex, 1);
+                    }
+                } 
+
+            }
+
+            // Set part options
             while (select.options.length) {select.options.remove(0);}
             for (let key in staveData) {
                 const option = document.createElement("option");
@@ -180,16 +199,6 @@ export default (() => {
 
             staveNumber = select.options[select.selectedIndex].text;
             notes = staveData[staveNumber];
-
-            // Remove tied notes
-            const ties = mei.querySelectorAll("tie");
-            for (const tie of ties) {
-                const skipNoteId = tie.getAttribute("endid").slice(1);
-                const skipNoteIndex = notes.findIndex((note) => {
-                    return (note.getAttribute("xml:id") === skipNoteId);
-                });
-                notes.splice(skipNoteIndex, 1);
-            }
             
             if (notes.length > 0) {
                 const id = notes[0].getAttribute("xml:id");
@@ -198,11 +207,11 @@ export default (() => {
             }
         }
     
-        function goToMeasure() {
-            function getMeasure(note) {
-                return +note.closest("measure").getAttribute("n");
-            }
+        function getMeasure(note) {
+            return +note.closest("measure").getAttribute("n");
+        }
 
+        function goToMeasure() {
             unhighlightCurrentNote();
 
             function getCurrentMeasure() {
