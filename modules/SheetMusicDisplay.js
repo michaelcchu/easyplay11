@@ -124,10 +124,13 @@ export default (() => {
 
         const library = document.getElementById("library");
         // Set library options
+        const optgroup = document.createElement("optgroup");
+        optgroup.label = "Chorales"
         for (let i = 1; i <= 371; i++) {
             const option = document.createElement("option");
-            option.text = i; library.add(option);
+            option.text = i; optgroup.append(option);
         }
+        library.add(optgroup);
         library.addEventListener("change", loadChorale);
 
         const select = document.getElementById("select");
