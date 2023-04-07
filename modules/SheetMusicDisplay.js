@@ -35,7 +35,7 @@ export default (() => {
             } else {
                 pitch += accidentalVal[accidGes];
             }
-            
+
             const note = {
                 pitch: pitch,
                 octave: +meiNote.getAttribute("oct")
@@ -246,6 +246,8 @@ export default (() => {
         
         function setTrack() {
             i = -1;
+
+            unhighlightCurrentNote();
 
             staveNumber = select.options[select.selectedIndex].text;
             notes = staveData[staveNumber];
