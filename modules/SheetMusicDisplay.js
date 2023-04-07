@@ -16,11 +16,26 @@ export default (() => {
             let pitch = val[meiNote.getAttribute("pname")];
             const accidGes = meiNote.getAttribute("accid.ges");
             const accid = meiNote.getAttribute("accid");
+
+            // handle cautionAccids
+            const cautionAccids = meiNote.querySelectorAll("accid");
+            for (let cautionAccid of cautionAccids) {
+                const accidGes = cautionAccid.getAttribute("accid.ges");
+                const accid = cautionAccid.getAttribute("accid");
+                if (accid) {
+                    pitch += accidentalVal[accid];
+                } else {
+                    pitch += accidentalVal[accidGes];
+                }
+            }
+
+            // handle regular accids
             if (accid) {
                 pitch += accidentalVal[accid];
             } else {
                 pitch += accidentalVal[accidGes];
             }
+            
             const note = {
                 pitch: pitch,
                 octave: +meiNote.getAttribute("oct")
