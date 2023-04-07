@@ -1,5 +1,6 @@
 export default (() => {
 
+    // i is the current note index
     let notes; let i; let tk; let mei; let staveData; let staveNumber;
 
     const val = {"c":0,"d":2,"e":4,"f":5,"g":7,"a":9,"b":11,"#":1,"&":-1,"":0};
@@ -8,6 +9,7 @@ export default (() => {
     "su":0.75,"sd":0.25,"fu":-0.25,"fd":-0.75,"nu":0,"nd":0}
     const scrollableDiv = document.querySelector(".main");
 
+    // Returns the pitch of the current note
     function getCurrentNote() {
         let playingNotes = document.querySelectorAll('g.note.playing');
         for (let playingNote of playingNotes) {
@@ -54,15 +56,6 @@ export default (() => {
         }
     }
 
-    function highlightCurrentNote() {
-        const id = notes[i].getAttribute("xml:id");
-        const note = document.getElementById(id);
-        const notehead = note.querySelector('.notehead')
-        note.classList.add("playing")
-        notehead.classList.add("playing")
-        scrollToNote(note)
-    }
-
     function scrollToNote(note) {
         const notehead = note.querySelector('.notehead')
         const bbox = notehead.getBBox();
@@ -86,11 +79,31 @@ export default (() => {
         else if (y > midY) {scrollableDiv.scrollTop += y - midY}
     }
 
+    function scrollToCurrentNote() {
+        if (notes.length > 0) {
+            let noteIndex;
+            if (i < 0) { noteIndex = 0; }
+            else if (i >= notes.length) {noteIndex = notes.length - 1;}
+            else {
+                noteIndex = i; 
+                const id = notes[i].getAttribute("xml:id");
+                const note = document.getElementById(id);
+                const notehead = note.querySelector('.notehead');
+                note.classList.add("playing");
+                notehead.classList.add("playing");
+            }
+            const meiNote = notes[noteIndex];
+            const id = meiNote.getAttribute("xml:id");
+            const svgNote = document.getElementById(id);
+            scrollToNote(svgNote);
+        }  
+    }
+
     function goToNextNote() {
         unhighlightCurrentNote();
         if (i < notes.length) {
             i++;
-            if (i < notes.length) {highlightCurrentNote();}
+            if (i < notes.length) {scrollToCurrentNote();}
         }
     }
 
@@ -98,7 +111,7 @@ export default (() => {
         unhighlightCurrentNote();
         if (i >= 0) {
             i--;
-            if (i >= 0) {highlightCurrentNote();}
+            if (i >= 0) {scrollToCurrentNote();}
         }
     }
 
@@ -252,11 +265,7 @@ export default (() => {
             staveNumber = select.options[select.selectedIndex].text;
             notes = staveData[staveNumber];
             
-            if (notes.length > 0) {
-                const id = notes[0].getAttribute("xml:id");
-                const note = document.getElementById(id);
-                scrollToNote(note);
-            }
+            scrollToCurrentNote();
         }
     
         function getMeasure(note) {
@@ -303,7 +312,7 @@ export default (() => {
                 while (condition(1)) {i++;}
                 while (condition(-1)) {i--;}
                 
-                highlightCurrentNote();  
+                scrollToCurrentNote();  
             }
 
             document.activeElement.blur();
@@ -340,19 +349,7 @@ export default (() => {
         function setZoom() {
             tk.setOptions({scale: +zoomFactor.value});
             document.getElementById("container").innerHTML = tk.renderToSVG(1);
-            setTimeout(() => {
-                if (notes.length > 0) {
-                    let noteIndex;
-                    if (i < 0) { noteIndex = 0; }
-                    else if (i >= notes.length) {noteIndex = notes.length - 1;}
-                    else {noteIndex = i; highlightCurrentNote();}
-                    const meiNote = notes[noteIndex];
-                    const id = meiNote.getAttribute("xml:id");
-                    const svgNote = document.getElementById(id);
-                    scrollToNote(svgNote);
-                }    
-            }, 0);
-
+            setTimeout(scrollToCurrentNote, 0);
             document.activeElement.blur(); 
         }
 
