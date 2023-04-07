@@ -243,44 +243,50 @@ export default (() => {
         }
     
         function getMeasure(note) {
-            return +note.closest("measure").getAttribute("n");
+            const number = note.closest("measure").getAttribute("n");
+            if (number !== null) {return +number;}
+            else {return number;}
         }
 
         function goToMeasure() {
-            unhighlightCurrentNote();
-
-            function getCurrentMeasure() {
-                if (i < 0) {
-                    if (notes.length > 0) {
-                        return -1;
-                    } else {
-                        return null;
-                    }
-                } else if (i >= notes.length) {
-                    if (notes.length > 0) {
-                        return getMeasure(notes[notes.length - 1]);
-                    } else {
-                        return null;
-                    }
-                } else {
-                    return getMeasure(notes[i]);
-                }
-            }
-
             const measureInput = document.getElementById("measureInput");
             let measure = +measureInput.value;
-            
-            if (notes.length > 0) {
+            if (measure && notes.length > 0) {
+                unhighlightCurrentNote();
+
                 const lastMeasure = getMeasure(notes[notes.length - 1]);
                 if (measure > lastMeasure) {
                     measure = lastMeasure;
                 }
 
-                while (getCurrentMeasure() < measure) {i++;}
-                while (getCurrentMeasure() > measure) {i--;}
+                function getCurrentMeasure() {
+                    if (i < 0) {
+                        if (notes.length > 0) {
+                            return -1;
+                        } else {
+                            return undefined;
+                        }
+                    } else if (i >= notes.length) {
+                        if (notes.length > 0) {
+                            return getMeasure(notes[notes.length - 1]);
+                        } else {
+                            return undefined;
+                        }
+                    } else {
+                        return getMeasure(notes[i]);
+                    }
+                }
+
+                function condition(a) {
+                    const current = getCurrentMeasure();
+                    return (current === null) || 
+                            (a * (measure - current) > 0);
+                }
+
+                while (condition(1)) {i++;}
+                while (condition(-1)) {i--;}
                 
-                highlightCurrentNote();
-    
+                highlightCurrentNote();  
             }
 
             document.activeElement.blur();
