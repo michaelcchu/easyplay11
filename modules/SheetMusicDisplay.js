@@ -123,15 +123,35 @@ export default (() => {
         go.addEventListener("click", goToMeasure);
 
         const library = document.getElementById("library");
-        // Set library options
-        const optgroup = document.createElement("optgroup");
-        optgroup.label = "Chorales"
+
+        // Add Chorale options
+        let optgroup = document.createElement("optgroup");
+        optgroup.label = "Chorales";
         for (let i = 1; i <= 371; i++) {
             const option = document.createElement("option");
             option.text = i; optgroup.append(option);
         }
         library.add(optgroup);
-        library.addEventListener("change", loadChorale);
+
+        // Add Well-Tempered Clavier Book 1 options
+        optgroup = document.createElement("optgroup");
+        optgroup.label = "Well-Tempered Clavier Book 1";
+        for (let i = 1; i <= 24; i++) {
+            const option = document.createElement("option");
+            option.text = i; optgroup.append(option);
+        }
+        library.add(optgroup);
+
+        // Add Well-Tempered Clavier Book 2 options
+        optgroup = document.createElement("optgroup");
+        optgroup.label = "Well-Tempered Clavier Book 2";
+        for (let i = 1; i <= 24; i++) {
+            const option = document.createElement("option");
+            option.text = i; optgroup.append(option);
+        }
+        library.add(optgroup);
+
+        library.addEventListener("change", loadMusic);
 
         const select = document.getElementById("select");
         select.addEventListener("change", setTrack);
@@ -171,17 +191,18 @@ export default (() => {
             // Remove tied notes
             const ties = mei.querySelectorAll("tie");
             for (const tie of ties) {
-                const skipNoteId = tie.getAttribute("endid").slice(1);
-                for (let key in staveData) {
-                    const stave = staveData[key];
-                    const skipNoteIndex = stave.findIndex((note) => {
-                        return (note.getAttribute("xml:id") === skipNoteId);
-                    });
-                    if (skipNoteIndex > -1) {
-                        stave.splice(skipNoteIndex, 1);
-                    }
-                } 
-
+                if (tie.getAttribute("type") !== "hanging") {
+                    const skipNoteId = tie.getAttribute("endid").slice(1);
+                    for (let key in staveData) {
+                        const stave = staveData[key];
+                        const skipNoteIndex = stave.findIndex((note) => {
+                            return (note.getAttribute("xml:id") === skipNoteId);
+                        });
+                        if (skipNoteIndex > -1) {
+                            stave.splice(skipNoteIndex, 1);
+                        }
+                    }    
+                }
             }
 
             // Set part options
@@ -194,7 +215,7 @@ export default (() => {
             setTrack();
         }
     
-        loadChorale();
+        loadMusic();
 
         // code for left and right navigation buttons
         let interval;
@@ -231,13 +252,26 @@ export default (() => {
 
         document.addEventListener("keydown", moveCursor);
 
-        function loadChorale() {
-            let choraleNumber = library.options[library.selectedIndex].text;
-            choraleNumber = ("00" + choraleNumber).slice(-3);
-            // const url = "./data/Beethoven__Symphony_No._9__Op._125-Clarinetto_1_in_C_(Clarinet).mxl";
-            // const url = "https://kern.humdrum.org/cgi-bin/ksdata?file=chor001.krn&l=users/craig/classical/bach/371chorales&format=kern";
-            const url = "https://raw.githubusercontent.com/craigsapp/bach-370-chorales/master/kern/chor" 
-                + choraleNumber + ".krn";
+        function loadMusic() {
+            const option = library.options[library.selectedIndex];
+            let number = option.text;
+            let optgroup = option.parentElement.label;
+
+            let url;
+
+            if (optgroup === "Chorales") {
+                number = ("00" + number).slice(-3);
+                url = "https://raw.githubusercontent.com/craigsapp/"
+                    + "bach-370-chorales/master/kern/chor" + number + ".krn";
+            } else if (optgroup === "Well-Tempered Clavier Book 1") {
+                number = ("0" + number).slice(-2);
+                url = "https://raw.githubusercontent.com/humdrum-tools/"
+                    + "bach-wtc/master/kern/wtc1f" + number + ".krn";
+            } else if (optgroup === "Well-Tempered Clavier Book 2") {
+                number = ("0" + number).slice(-2);
+                url = "https://raw.githubusercontent.com/humdrum-tools/"
+                    + "bach-wtc/master/kern/wtc2f" + number + ".krn";
+            }
 
             fetch(url)
             .then( response => {
